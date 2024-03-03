@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deepfake image detection</title>
+    <style>
+        body{
+            text-align: center;
+            background-color: rgb(240, 236, 236);
+            /* display: flex; */
+            /* padding:25px ;  */
+        }
+        /* .container1{
+            
+        } */
+        .container2{
+            text-align: center;
+             margin: 125px;
+             padding:25px ; 
+            height: 470px;
+            width: 1220px;
+            background-color: rgb(213, 202, 222);
+        }
+    </style>
+</head>
+<body>
+    <H1>FAKE IMAGE DETECTOR</H1>
+    
+    
+    
+        
+        <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+                <div class="container2">
+                    <h2>Upload image</h2>
+                    
+                    {{form}}
+                    <input type="submit" value="Upload">
+                    {% if result %}
+                    <p>result={{result}}</p>
+                    {% endif %}
+               </div>
+            
+        </form>
+       
+    
+    
+    
+</body>
+</html>
