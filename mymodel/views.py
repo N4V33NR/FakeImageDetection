@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate,login
 import tensorflow as tf
 from django.contrib import messages
 
+
+
 import numpy as np
 from .form import ImageForm
 from .models import User
@@ -107,5 +109,9 @@ def home(request):
         return render(request,"home.html",{'result':prediction})
       
     else:
-      return render(request,"home.html",{'form':ImageForm})
+      if not request.user.is_authenticated:
+         msg="You are not logged in please log in first"
+         return render(request,'login.html',{'messages':msg})
+      else:
+         return render(request,"home.html",{'form':ImageForm})
 ######################################################################## 
