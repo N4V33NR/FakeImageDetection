@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 
-class image(models.Model):
+class Image(models.Model):
     photo=models.ImageField(upload_to="myImage")
     date=models.DateTimeField(auto_now_add=True)
     

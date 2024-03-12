@@ -11,15 +11,16 @@
             /* display: flex; */
             /* padding:25px ;  */
         }
-        /* .container1{
-            
-        } */
-        .container2{
+        .container{
+          display: flex;  
+          align-items: center;
+        }
+        .container1{
             text-align: center;
             margin: 125px;
             padding:25px ; 
-            height: 470px;
-            width: 1220px;
+            height: 300px;
+            width: 600px;
             background-color: rgb(213, 202, 222);
         }
     </style>
@@ -27,25 +28,31 @@
 <body>
     <H1>FAKE IMAGE DETECTOR</H1>
     
-    
-    
-        
+<div class="container">
+    <div class="container1">
         <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
-                <div class="container2">
-                    <h2>Upload image</h2>
-                    
-                    {{form}}
-                    <input type="submit" value="Upload">
-                    {% if result %}
-                    <p>result={{result}}</p>
-                    {% endif %}
-               </div>
-            
+            <h2>Upload Image</h2>
+            {{form}}
+            <input type="submit" value="Upload">
         </form>
+    </div>
        
-    
+        {% if img %}
+        <div class="image-preview">
+            <h3>Image Preview</h3>
+            <div class="card">
+             <img src="{{ img.photo.url }}" alt="img">
+            </div>
+            {% endif %}
+            {% if result %}
+                 <h3>result={{result}}</h3>
+            {% endif %}
+
+        </div>
+
+       
+</div>
     
     
 </body>

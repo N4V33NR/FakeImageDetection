@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import image
+from .models import Image
 
 # Register your models here.
-@admin.register(image)
+@admin.register(Image)
 class imageAdmin(admin.ModelAdmin):
     list_display=['id','photo','date']

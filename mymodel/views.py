@@ -9,7 +9,7 @@ from django.contrib import messages
 
 import numpy as np
 from .form import ImageForm
-from .models import User
+from .models import User,Image
 import cv2
 import os
 
@@ -105,8 +105,10 @@ def home(request):
         image = cv2.imread(file_path)
         
         prediction = predict_image(image)
-
-        return render(request,"home.html",{'result':prediction})
+        img= Image.objects.order_by('-id').first()
+        
+        return render(request,"home.html",{'result':prediction,'img':img,'form':ImageForm})
+    
       
     else:
       if not request.user.is_authenticated:
@@ -114,4 +116,6 @@ def home(request):
          return render(request,'login.html',{'messages':msg})
       else:
          return render(request,"home.html",{'form':ImageForm})
+    
+
 ######################################################################## 
