@@ -1,9 +1,7 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse,request
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 import tensorflow as tf
-from django.contrib import messages
 
 
 
@@ -105,8 +103,9 @@ def home(request):
         image = cv2.imread(file_path)
         
         prediction = predict_image(image)
+        # getting and resizig image for preview
         img= Image.objects.order_by('-id').first()
-        
+               
         return render(request,"home.html",{'result':prediction,'img':img,'form':ImageForm})
     
       
