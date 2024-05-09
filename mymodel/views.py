@@ -2,9 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login
 import tensorflow as tf
-
-
-
+from django.http import HttpResponse
 import numpy as np
 from .form import ImageForm
 from .models import User,Image
@@ -53,30 +51,14 @@ def logIn(request):
         messages = ""
         return render(request, "login.html",{'messages':messages})
   
-  
-
-   
-
-        
-    
-
 
 ###########################################################################
 
 def preprocess_image(image):
-    # Read the image using OpenCV
     
-    
-    # Resize the image to a fixed size (e.g., 150x150 pixels)
     image = cv2.resize(image, (150, 150))
-    
-    # Convert the image to RGB color space (if it's in BGR format)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
-    # Normalize pixel values to range [0, 1]
     image = image.astype('float32') / 255.0
-    
-    # Expand dimensions to add batch dimension
     image = np.expand_dims(image, axis=0)
     
     return image
@@ -85,36 +67,46 @@ def predict_image(image):
     model = tf.keras.models.load_model('fake_image_classifier_model.h5')
     image = preprocess_image(image)
     prediction = model.predict(image)
+    print(prediction)
     if prediction[0][0] > 0.5:
         return "Fake"
     else:
         return "Real"
     
 
+
+
 def home(request):
     if request.method == 'POST':
-        form= ImageForm(request.POST, request.FILES)
+        form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-         form.save()
-        uploaded_file = form.cleaned_data['photo']  
-        filename = uploaded_file.name
-        # image_path =request.POST.get('image')
-        file_path = os.path.join(MEDIA_ROOT, filename)
-        image = cv2.imread(file_path)
-        
-        prediction = predict_image(image)
-        # getting and resizig image for preview
-        img= Image.objects.order_by('-id').first()
-               
-        return render(request,"home.html",{'result':prediction,'img':img,'form':ImageForm})
-    
-      
+            # Check if file is uploaded
+            if request.FILES:
+                form.save()
+                uploaded_file = form.cleaned_data['photo']
+                filename = uploaded_file.name
+                file_path = os.path.join(MEDIA_ROOT, filename)
+                image = cv2.imread(file_path)
+                prediction = predict_image(image)
+                img = Image.objects.order_by('-id').first()
+                return render(request, "home.html", {'result': prediction, 'img': img, 'form': ImageForm()})
+            # Check if URL is provided
+    if request.method == 'POST':
+        url = request.POST.get('image_url')
+        print("URL submitted:", url)  # Debug message
+        try:
+            Image.save_image_from_url(url)
+            img = Image.objects.order_by('-id').first()
+            image_file = img.photo
+            file_path = image_file.path
+            image = cv2.imread(file_path)
+            prediction = predict_image(image)
+            return render(request, "home.html", {'result': prediction, 'img': img, 'form': ImageForm()})
+        except Exception as e:
+            print("Error:", e)  # Debug message
+            return HttpResponse(f"Error downloading or saving image: {str(e)}")
     else:
-      if not request.user.is_authenticated:
-         msg="You are not logged in please log in first"
-         return render(request,'login.html',{'messages':msg})
-      else:
-         return render(request,"home.html",{'form':ImageForm})
-    
+        form = ImageForm()
+    return render(request, "home.html", {'form': form})
 
 ######################################################################## 

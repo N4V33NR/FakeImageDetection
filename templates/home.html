@@ -14,26 +14,31 @@
         .container{
           display: flex;  
           align-items: center;
+          justify-content: center;
+          flex-direction: column;
         }
         .container1{
             text-align: center;
-            margin: 125px;
-            padding:25px ; 
+            margin: 50px;
+            padding: 25px; 
             height: 300px;
             width: 600px;
-            background-color: rgb(213, 202, 222);
+            background-color: rgba(63, 224, 208, 0.8);
             opacity: 70%;
             border-radius: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .image-preview{
-            background-color: rgba(213, 202, 222, 0.7);
+            background-color: rgba(63, 224, 208, 0.8);
             height: 500px;
             width: 400px;
             align-items: center;
             justify-content: center;
             border-radius: 2rem;
-           
-            
+            margin-top: 20px;
         }
         .card{
             object-fit: contain;
@@ -41,43 +46,74 @@
             width: 300px;
             margin: 3rem;
             opacity: 100%;
-            }
+        }
         img{
             object-fit: contain;
             width: 100%; height: 100%;
-           }
+        }
+        
     </style>
 </head>
-<body background="{% static 'images\\deepfake-background.jpg' %}">
+<body background="{% static 'images/deepfake-background.jpg' %}">
    
     <H1>FAKE IMAGE DETECTOR</H1>
     
 <div class="container">
     <div class="container1">
-        <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <h2>Upload Image</h2>
-            {{form}}
-            <input type="submit" value="Upload">
-        </form>
-    </div>
-       
-        {% if img %}
-        <div class="image-preview">
-            <h3>Image Preview</h3>
-            <div class="card">
-             <img src="{{ img.photo.url }}" alt="img">
-            </div>
-            {% endif %}
-            {% if result %}
-                 <h3>Result={{result}}</h3>
-            {% endif %}
-
+        <div id="file_upload" style="display:block;">
+            <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h2>Upload Image</h2>
+                {{ form }}
+                <input type="submit" value="Upload">
+            </form>
+            <button onclick="toggleInput()">Switch to URL Input</button>
         </div>
-
-       
+        <div id="url_input" style="display:none;">
+            <form action="{% url 'home' %}" method="post">
+                {% csrf_token %}
+                <h2>Enter Image URL</h2>
+                <label for="image_url">Image URL:</label>
+                <input type="text" id="image_url" name="image_url" required>
+                <input type="submit" value="Submit">
+            </form>
+            <button onclick="toggleInput()">Switch to File Upload</button>
+        </div>
+    </div>
+    {% if img %}
+    <div class="image-preview">
+        
+        <h3>Image Preview</h3>
+        <div class="card">
+            <img src="{{ img.photo.url }}" alt="img">
+        </div>
+        
+        
+    
+      <div class="result">
+        {% if result %}
+        <h3>Result: {{ result }}</h3>
+        {% endif %}
+      </div>
+    
+    </div>
+    {% endif %}
 </div>
-    
-    
+
+<script>
+    function toggleInput() {
+        var fileUpload = document.getElementById("file_upload");
+        var urlInput = document.getElementById("url_input");
+
+        if (fileUpload.style.display === "block") {
+            fileUpload.style.display = "none";
+            urlInput.style.display = "block";
+        } else {
+            fileUpload.style.display = "block";
+            urlInput.style.display = "none";
+        }
+    }
+</script>
+  
 </body>
 </html>

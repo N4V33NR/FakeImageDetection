@@ -1,12 +1,22 @@
-from django.db import models
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 
+import os
+from django.db import models
+from django.core.files import File
+from urllib.request import urlopen
+
 class Image(models.Model):
-    photo=models.ImageField(upload_to="myImage")
-    date=models.DateTimeField(auto_now_add=True)
+    photo = models.ImageField(upload_to="myImage")
+    date = models.DateTimeField(auto_now_add=True)
+
+    def save_image_from_url(url):
+        print("URL received:", url)  # Debug message
+        img_name = os.path.basename(url)
+        response = urlopen(url)
+        image = File(response)
+        new_image = Image()
+        new_image.photo.save(img_name, image, save=True)
     
 ##################################################
 
@@ -21,7 +31,7 @@ class UserManager(BaseUserManager):
         user = self.model (
             username=username,
             email=email,
-            password=make_password(password)  # Hash password before saving
+            password=make_password(password)  
         )
         user.save()
         return user
@@ -39,7 +49,7 @@ class UserManager(BaseUserManager):
     def get_by_natural_key(self, username):
      return self.get(**{self.model.USERNAME_FIELD: username})
 
-    # Add other custom functions as needed
+   
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=255, unique=True)
@@ -47,21 +57,13 @@ class User(AbstractBaseUser):
     password = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    USERNAME_FIELD = 'username'  # Set the email as the authentication field
-    REQUIRED_FIELDS = ['password']  # Specify required fields besides email
+    USERNAME_FIELD = 'username'  
+    REQUIRED_FIELDS = ['password']  
     
-
-    objects = UserManager()  # Assign the custom manager
+    objects = UserManager() 
 
     def __str__(self):
         return self.email 
 
-    objects = UserManager()  # Assign the custom manager
-
-
-
     
-
-
 ##########################
-
