@@ -110,3 +110,25 @@ def home(request):
     return render(request, "home.html", {'form': form})
 
 ######################################################################## 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import cv2
+
+@csrf_exempt
+def check_image_authenticity(request):
+    if request.method == 'POST':
+        # Assuming the image URL is sent in the request body
+        image_url = request.POST.get('image_url')
+        print(image_url)
+        if image_url:
+           Image.save_image_from_url(image_url)
+           img = Image.objects.order_by('-id').first()
+           image_file = img.photo
+           file_path = image_file.path
+           image = cv2.imread(file_path)
+           prediction = predict_image(image)
+           return JsonResponse({'authenticity': prediction})
+        else:
+            return JsonResponse({'error': 'Image URL not found'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)

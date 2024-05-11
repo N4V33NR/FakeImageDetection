@@ -39,16 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mymodel',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    
 ]
 
 ROOT_URLCONF = 'FakeImageDetection.urls'
@@ -135,3 +139,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL= '/media/'
 MEDIA_ROOT = BASE_DIR/'media'
+
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+    'chrome-extension://ogameaekhkbiagpaobcdfnkedccckpon',
+    
+]
+ALLOWED_HOSTS = [  
+    '127.0.0.1',
+    'chrome-extension://ogameaekhkbiagpaobcdfnkedccckpon',
+    ]
+
+CSRF_TRUSTED_ORIGINS = ['chrome-extension://ogameaekhkbiagpaobcdfnkedccckpon']
