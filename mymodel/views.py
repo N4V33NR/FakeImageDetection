@@ -11,8 +11,6 @@ import os
 
 MEDIA_ROOT = 'C:\\Users\\Dell\\projects\\FakeImageDetection\\media\\myImage'
 
-# Create your views here.
-
 
 def welcome(request):
    return render(request,"welcome.html") 
@@ -93,7 +91,7 @@ def home(request):
             # Check if URL is provided
     if request.method == 'POST':
         url = request.POST.get('image_url')
-        print("URL submitted:", url)  # Debug message
+        
         try:
             Image.save_image_from_url(url)
             img = Image.objects.order_by('-id').first()
@@ -103,7 +101,7 @@ def home(request):
             prediction = predict_image(image)
             return render(request, "home.html", {'result': prediction, 'img': img, 'form': ImageForm()})
         except Exception as e:
-            print("Error:", e)  # Debug message
+            print("Error:", e)  
             return HttpResponse(f"Error downloading or saving image: {str(e)}")
     else:
         form = ImageForm()
@@ -119,7 +117,7 @@ def check_image_authenticity(request):
     if request.method == 'POST':
         # Assuming the image URL is sent in the request body
         image_url = request.POST.get('image_url')
-        print(image_url)
+       
         if image_url:
            Image.save_image_from_url(image_url)
            img = Image.objects.order_by('-id').first()

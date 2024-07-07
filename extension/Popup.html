@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepFake Detector</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>DeepFake Image Detection</h1>
+  </header>
+  <main>
+    <section id="image-section">
+      <div id="image-previews"></div>
+      <div class="button-container">
+        <button class="btn" id="choose-image-btn">Get Started</button>
+        <!-- <button class="btn" id="remove-image-btn">Remove</button> -->
+      </div>
+    </section>
+    <section id="prediction-section">
+      <div class="image-previews">
+        <span class="image"></span>
+        <p id="prediction"></p>
+      </div>
+    </section>
+  </main>
+  <script src="Popup.js"></script>
+  <script src="background.js"></script>
+  <script src="content.js"></script>
+</body>
+</html>

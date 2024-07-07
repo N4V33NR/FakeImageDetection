@@ -11,7 +11,7 @@ class Image(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def save_image_from_url(url):
-        print("URL received:", url)  # Debug message
+       
         img_name = os.path.basename(url)
         response = urlopen(url)
         image = File(response)

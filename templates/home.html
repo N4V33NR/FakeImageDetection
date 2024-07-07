@@ -4,56 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>deepfake image detection</title>
-   <link rel="stylesheet" href="{% static 'stylesheets/home.css' %}">
+    <title>Deepfake Image Detection</title>
+    <link rel="stylesheet" href="{% static 'stylesheets/home.css' %}">
+    <style>
+        body {
+          background: url("{%  static 'images/bgimg.png' %}")
+        }
+      </style>
 </head>
-<body background="{% static 'images/deepfake-background.jpg' %}">
-   
-    <H1>FAKE IMAGE DETECTOR</H1>
-    
-<div class="container">
-    <div class="container1">
-        <div id="file_upload" style="display:block;">
-            <form action="{% url 'home' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <h2>Upload Image</h2>
-                {{ form }}
-                <input type="submit" value="Upload">
-            </form>
-            <button onclick="toggleInput()">Switch to URL Input</button>
-        </div>
-        <div id="url_input" style="display:none;">
-            <form action="{% url 'home' %}" method="post">
-                {% csrf_token %}
-                <h2>Enter Image URL</h2>
-                <label for="image_url">Image URL:</label>
-                <input type="text" id="image_url" name="image_url" required>
-                <input type="submit" value="Submit">
-            </form>
-            <button onclick="toggleInput()">Switch to File Upload</button>
-        </div>
-    </div>
-    {% if img %}
-    <div class="image-preview">
-        
-        <h3>Image Preview</h3>
-        <div class="card">
-            <img src="{{ img.photo.url }}" alt="img">
-        </div>
-        
-        
-    
-      <div class="result">
-        {% if result %}
-        <h3>Result: {{ result }}</h3>
-        {% endif %}
-      </div>
-    
-    </div>
-    {% endif %}
-</div>
+<body class="background-image">
 
-<script src="{% static 'javascript/home.js' %}"></script>
-  
+    <header class="site-header">
+        <h1 class="site-title">Deepfake Image Detection</h1>
+    </header>
+    
+    <main class="container">
+        <section class="upload-section">
+            <div id="file_upload" class="form-container" style="display:block;">
+                <form class="form" action="{% url 'home' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2>Upload Image</h2>
+                    {{ form }}
+                    <input type="submit" value="Submit" class="button">
+                </form>
+                <button class="button" onclick="toggleInput()">Switch to URL Input</button>
+            </div>
+            <div id="url_input" class="form-container" style="display:none;">
+                <form class="form" action="{% url 'home' %}" method="post">
+                    {% csrf_token %}
+                    <h2>Enter Image URL</h2>
+                    <label for="image_url">Image URL:</label>
+                    <input type="text" id="image_url" name="image_url" required>
+                    <input type="submit" value="Submit" class="button">
+                </form>
+                <button class="button" onclick="toggleInput()">Switch to File Upload</button>
+            </div>
+        </section>
+        
+        {% if img %}
+        <section class="image-preview-section">
+            <h3>Image Preview</h3>
+            <div class="card">
+                <img src="{{ img.photo.url }}" alt="Uploaded image">
+            </div>
+            
+            <div class="result">
+                {% if result %}
+                <h3>Result: {{ result }}</h3>
+                {% endif %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <script src="{% static 'javascript/home.js' %}"></script>
 </body>
 </html>

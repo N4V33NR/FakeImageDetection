@@ -81,12 +81,12 @@ WSGI_APPLICATION = 'FakeImageDetection.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'user',
-        'USER': 'root',
-        'PASSWORD': 'nav_9627',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': '',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
